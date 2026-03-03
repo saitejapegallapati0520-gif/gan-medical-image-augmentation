@@ -1,4 +1,4 @@
-# 🧬 GAN-Based Medical Image Augmentation for Skin Lesion Classification
+#  GAN-Based Medical Image Augmentation for Skin Lesion Classification
 
 <div align="center">
 
@@ -15,7 +15,7 @@ architectures for synthetic medical image generation and skin lesion classificat
 
 ---
 
-## 📌 Overview
+##  Overview
 
 Medical image datasets suffer from **severe class imbalance** — rare skin lesion types 
 have very few training samples, causing CNN models to underperform on minority classes.
@@ -24,14 +24,14 @@ This project systematically compares **5 augmentation strategies** across **6 ex
 phases** to identify the optimal GAN-based approach for improving CNN classification 
 performance on the HAM10000 dermoscopic dataset (10,015 images, 7 classes).
 
-> 💡 **Key Finding:** Class-aware synthetic augmentation — not just quantity — is the 
+>  **Key Finding:** Class-aware synthetic augmentation — not just quantity — is the 
 > critical driver of performance. Training 7 class-specific DCGANs and generating 
 > 300 balanced samples per class improved CNN accuracy from 76.5% to **79%** and 
 > Macro F1 from 0.476 to **0.740**.
 
 ---
 
-## 📊 Results Summary
+##  Results Summary
 
 | Method | Accuracy | Macro F1 | Minority Class Behavior |
 |--------|----------|----------|------------------------|
@@ -43,7 +43,7 @@ performance on the HAM10000 dermoscopic dataset (10,015 images, 7 classes).
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Category | Tools |
 |----------|-------|
@@ -57,7 +57,7 @@ performance on the HAM10000 dermoscopic dataset (10,015 images, 7 classes).
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Generator — DCGAN
 ```
@@ -129,7 +129,7 @@ Output: Class Probabilities (7 skin lesion types)
 
 ---
 
-## 🔬 Dataset — HAM10000
+##  Dataset — HAM10000
 
 | Class | Label | Description | Samples |
 |-------|-------|-------------|---------|
@@ -141,12 +141,12 @@ Output: Class Probabilities (7 skin lesion types)
 | Vascular Lesions | vasc | Blood vessel lesion | ~142 |
 | Dermatofibroma | df | Benign fibrous growth | ~115 |
 
-> ⚠️ NV class represents ~67% of all samples. DF and VASC together < 3%.  
+>  NV class represents ~67% of all samples. DF and VASC together < 3%.  
 > This extreme imbalance is the core problem this project addresses.
 
 ---
 
-## 🔁 Experimental Phases
+##  Experimental Phases
 
 ### Phase 1 — Preprocessing
 - Extracted HAM10000 images from ZIP files via Google Drive
@@ -174,7 +174,7 @@ Output: Class Probabilities (7 skin lesion types)
 - StyleGAN2-augmented CNN: **74.3% accuracy** — no improvement over DCGAN
 - Confirmed: architecture quality alone cannot fix class imbalance
 
-### Phase 5 — Class-Specific DCGANs ✅ Best Approach
+### Phase 5 — Class-Specific DCGANs  Best Approach
 - Trained **7 separate DCGANs** — one per lesion class
 - Each DCGAN trained 60 epochs on class-filtered images
 - Generated **300 synthetic images per class = 2,100 total**
@@ -190,7 +190,7 @@ Output: Class Probabilities (7 skin lesion types)
 
 ---
 
-## 📈 Best Model — Per-Class Results (Phase 5)
+##  Best Model — Per-Class Results (Phase 5)
 
 | Class | Precision | Recall | F1-Score | Support |
 |-------|-----------|--------|----------|---------|
@@ -205,27 +205,27 @@ Output: Class Probabilities (7 skin lesion types)
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 gan-medical-image-augmentation/
 │
-├── 📓 ANN_Project2_DCGAN.ipynb
+├──  ANN_Project2_DCGAN.ipynb
 │   │
-│   ├── 🔧 SETUP & DATA LOADING
+│   ├──  SETUP & DATA LOADING
 │   │   ├── Google Drive mount & HAM10000 ZIP extraction
 │   │   ├── Image directory validation & sample visualization
 │   │   ├── Metadata CSV loading (image_id → file_path mapping)
 │   │   └── Library imports: TensorFlow, Keras, NumPy, Pandas, Matplotlib
 │   │
-│   ├── 🗃️ PHASE 1 — PREPROCESSING PIPELINE
+│   ├──  PHASE 1 — PREPROCESSING PIPELINE
 │   │   ├── IMG_SIZE = 64×64×3, normalize to [-1, 1] for GAN
 │   │   ├── Custom preprocess_image() function
 │   │   ├── Load all 10,015 images → NumPy array (float32)
 │   │   ├── TF Dataset: shuffle(10000) → batch(64) → prefetch(AUTOTUNE)
 │   │   └── Visual verification of preprocessed sample image
 │   │
-│   ├── 🤖 PHASE 2 — DCGAN ON FULL DATASET
+│   ├──  PHASE 2 — DCGAN ON FULL DATASET
 │   │   ├── Generator: Dense(8×8×256) → 3×Conv2DTranspose → tanh output (64×64×3)
 │   │   ├── Discriminator: 3×Conv2D + LeakyReLU(0.2) + Dropout(0.3) → Dense(1)
 │   │   ├── Loss: BinaryCrossentropy(from_logits=True) for both networks
@@ -235,7 +235,7 @@ gan-medical-image-augmentation/
 │   │   ├── generate_synthetic_images(2000) → majority class (NV) label assigned
 │   │   └── Synthetic image grid visualization (4×4 grid display)
 │   │
-│   ├── 🧠 PHASE 3A — BASELINE CNN CLASSIFIER
+│   ├──  PHASE 3A — BASELINE CNN CLASSIFIER
 │   │   ├── prepare_classifier_images(): normalize to [0, 1] for CNN
 │   │   ├── Stratified split: 70% train / 15% val / 15% test
 │   │   ├── One-hot encoding (7 classes), Adam(lr=1e-4), 50 epochs, batch=32
@@ -245,13 +245,13 @@ gan-medical-image-augmentation/
 │   │   ├── Classification report: precision, recall, F1 per class
 │   │   └── Result: Baseline Accuracy = 76.5%, Macro F1 = 0.476
 │   │
-│   ├── 📊 PHASE 3B — DCGAN-AUGMENTED CNN
+│   ├──  PHASE 3B — DCGAN-AUGMENTED CNN
 │   │   ├── Concatenate X_train + 2,000 synthetic images (majority class)
 │   │   ├── Same CNN architecture retrained from scratch on augmented data
 │   │   ├── Confusion matrix & classification report comparison
 │   │   └── Result: Augmented Accuracy = 74.2%, Macro F1 = 0.430 (worse — imbalance reinforced)
 │   │
-│   ├── 🎯 PHASE 5 — CLASS-SPECIFIC DCGANs  ✅ BEST APPROACH
+│   ├──  PHASE 5 — CLASS-SPECIFIC DCGANs   BEST APPROACH
 │   │   ├── load_images_for_label(df, label): filter images per class
 │   │   ├── make_tf_dataset(): TF pipeline per class
 │   │   ├── train_dcgan_for_label(): trains separate DCGAN for each of 7 classes
@@ -262,19 +262,19 @@ gan-medical-image-augmentation/
 │   │   ├── Classification report: per-class precision, recall, F1
 │   │   └── Result: Best Accuracy = 79%, Macro F1 = 0.740
 │   │
-│   └── ⚖️ PHASE 6 — CLASS-WEIGHTED TRAINING
+│   └──  PHASE 6 — CLASS-WEIGHTED TRAINING
 │       ├── compute_class_weight(balanced, classes, y_train_labels)
 │       ├── class_weight dict passed to Keras model.fit()
 │       ├── 90/10 train/val split, 60 epochs on augmented dataset
 │       ├── Confusion matrix + classification report
 │       └── Result: Accuracy = 77.3%, Macro F1 = 0.720
 │
-├── 📓 ANN_Project2_StyleGAN2.ipynb
+├──  ANN_Project2_StyleGAN2.ipynb
 │   │
-│   ├── 🔧 SETUP & DATA LOADING
+│   ├──  SETUP & DATA LOADING
 │   │   └── [Same as DCGAN notebook — Drive mount, extraction, preprocessing]
 │   │
-│   ├── 🎨 PHASE 4A — StyleGAN2 ARCHITECTURE & TRAINING
+│   ├──  PHASE 4A — StyleGAN2 ARCHITECTURE & TRAINING
 │   │   ├── build_mapping_network(): z (100-dim) → w (256-dim)
 │   │   │   ├── Latent normalization layer
 │   │   │   └── 4× Dense + LeakyReLU(0.2) layers
@@ -289,21 +289,21 @@ gan-medical-image-augmentation/
 │   │   ├── Training: 100 epochs, batch=64, fixed seed image grids
 │   │   └── Generated 2,000 synthetic images → assigned majority class (NV)
 │   │
-│   ├── 🧠 PHASE 4B — BASELINE CNN ON RAW DATA
+│   ├──  PHASE 4B — BASELINE CNN ON RAW DATA
 │   │   ├── Stratified split: 70% / 15% / 15%
 │   │   ├── Same CNN: Conv(32→64→128) + Dense(128) + Dropout(0.5) + Softmax(7)
 │   │   ├── Adam(lr=1e-4), 75 epochs, batch=32
 │   │   ├── Loss/accuracy curves, confusion matrix, classification report
 │   │   └── Result: Baseline Accuracy = 76.5%
 │   │
-│   └── 📊 PHASE 4C — StyleGAN2-AUGMENTED CNN
+│   └──  PHASE 4C — StyleGAN2-AUGMENTED CNN
 │       ├── Concatenate X_train + 2,000 StyleGAN2 synthetic majority-class images
 │       ├── Retrained CNN from scratch, 60 epochs, batch=32
 │       ├── Confusion matrix + full classification report
 │       └── Result: Accuracy = 74.3%, Macro F1 = 0.430
 │           (No improvement — architecture quality alone cannot fix imbalance)
 │
-└── 📄 ANN_Project2_Report.pdf
+└──  ANN_Project2_Report.pdf
     ├── Abstract & Problem Statement
     ├── Dataset Analysis — HAM10000 class distribution & imbalance
     ├── Methodology — All 6 experimental phases documented
@@ -315,7 +315,7 @@ gan-medical-image-augmentation/
 
 ---
 
-## 🚀 How To Run
+##  How To Run
 
 ### 1. Clone the Repository
 ```bash
@@ -346,12 +346,12 @@ Upload notebooks to Colab, mount Google Drive, and run cells in order:
 2. ANN_Project2_StyleGAN2.ipynb   → Phases 4, 5, 6
 ```
 
-> ⚠️ **GPU Required** — Enable in Colab: Runtime → Change Runtime Type → T4 GPU  
+>  **GPU Required** — Enable in Colab: Runtime → Change Runtime Type → T4 GPU  
 > Training all 7 class-specific DCGANs takes ~2–3 hours on Colab free tier.
 
 ---
 
-## 💡 Key Takeaways
+##  Key Takeaways
 
 **1. Single GAN ≠ Solution**
 Training one GAN on the full dataset without class conditioning reinforces the 
@@ -377,7 +377,7 @@ the accuracy of class-specific GAN augmentation alone.
 
 ---
 
-## 🔮 Future Work
+##  Future Work
 
 - Explore **Conditional GANs (cGAN)** for more direct class-controlled synthesis
 - Scale to higher resolution (**128×128, 256×256**) with larger compute
@@ -388,7 +388,7 @@ the accuracy of class-specific GAN augmentation alone.
 
 ---
 
-## 👥 Authors
+##  Authors
 
 **Sai Teja Pegallapati**
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/sai-teja-pegallapati)
